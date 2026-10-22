@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UFO Tracker — Catálogo de Avistamentos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="logo">🛸</span>
+        <h1>UFO TRACKER <small>— Catálogo & Análise de Avistamentos</small></h1>
+      </div>
+      <div class="topbar-right">
+        <span class="icon-btn" title="Alertas">👽</span>
+        <span class="icon-btn" title="Menu">⋮</span>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Cadastrado</span>
+        <span id="statTotal" class="stat-valor">0</span>
+      </div>
+      <div class="stat-card alta-estranheza">
+        <span class="stat-label">Alta Estranheza (H)</span>
+        <span id="statAlta" class="stat-valor">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Média Credibilidade</span>
+        <span id="statMediaCred" class="stat-valor">0.0 ★</span>
+      </div>
+    </section>
+
+    <section class="filtros">
+      <div class="campo campo-busca">
+        <label for="inputBusca">Buscar Local:</label>
+        <input type="text" id="inputBusca" placeholder="Ex: Varginha / MG...">
+      </div>
+
+      <div class="campo">
+        <label for="filtroFormato">Formato:</label>
+        <select id="filtroFormato">
+          <option value="todos">[ Todos ]</option>
+          <option value="disco">🛸 Disco</option>
+          <option value="esfera">🔵 Esfera</option>
+          <option value="triangulo">🔺 Triângulo</option>
+          <option value="estranheza">❓ Indefinido</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="filtroCred">Credibilidade:</label>
+        <select id="filtroCred">
+          <option value="0">[ Todas ]</option>
+          <option value="5">[ = 5 Estrelas ]</option>
+          <option value="4">[ ≥ 4 Estrelas ]</option>
+          <option value="3">[ ≥ 3 Estrelas ]</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="filtroStatus">Status:</label>
+        <select id="filtroStatus">
+          <option value="ativos">[ Ativos ]</option>
+          <option value="arquivados">[ Arquivados ]</option>
+          <option value="todos">[ Todos ]</option>
+        </select>
+      </div>
+    </section>
+
+    <main class="conteudo">
+      <div class="card-tabela">
+
+        <div class="card-header">
+          <h2>REGISTROS DE AVISTAMENTOS (<span id="contador">0</span>)</h2>
+          <span class="icone-ufo">🛸</span>
+        </div>
+
+        <div class="tabela-wrapper">
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Local</th>
+                <th>Formato</th>
+                <th>Duração</th>
+                <th>Credibilidade</th>
+                <th>Estranheza</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabela">
+            </tbody>
+          </table>
+        </div>
+
+        <p id="mensagemVazia" class="vazio" hidden>
+          Nenhum avistamento encontrado com os filtros selecionados. 👽
+        </p>
+
+      </div>
+
+      <div class="acoes-rodape">
+        <button id="btnAbrirModalNovo" class="btn btn-novo">+ NOVO REGISTRO</button>
+      </div>
+    </main>
+
+  </div>
+
+  <div id="modalDetalhes" class="modal-backdrop" hidden>
+    <div class="modal-conteudo">
+      <div class="modal-header">
+        <h3 id="modalDetalhesTitulo">📄 Detalhes do Avistamento</h3>
+        <button class="btn-fechar" id="btnFecharDetalhes">&times;</button>
+      </div>
+      <div class="modal-body" id="modalDetalhesCorpo">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secundario" id="btnFecharDetalhesRodape">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalNovoRegistro" class="modal-backdrop" hidden>
+    <div class="modal-conteudo modal-lg">
+      <div class="modal-header">
+        <h3>🛸 Cadastrar Novo Avistamento</h3>
+        <button class="btn-fechar" id="btnFecharNovo">&times;</button>
+      </div>
+      <form id="formNovoAvistamento" class="modal-body form-grid">
+        <div class="form-grupo">
+          <label for="novoData">Data do Caso *</label>
+          <input type="date" id="novoData" required>
+        </div>
+
+        <div class="form-grupo">
+          <label for="novoLocal">Cidade / UF *</label>
+          <input type="text" id="novoLocal" placeholder="Ex: Campinas / SP" required>
+        </div>
+
+        <div class="form-grupo">
+          <label for="novoFormato">Formato do Objeto</label>
+          <select id="novoFormato">
+            <option value="disco">🛸 Disco</option>
+            <option value="esfera">🔵 Esfera</option>
+            <option value="triangulo">🔺 Triângulo</option>
+            <option value="estranheza">❓ Indefinido</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="novoDuracao">Duração (minutos)</label>
+          <input type="number" id="novoDuracao" min="1" value="10" required>
+        </div>
+
+        <div class="form-grupo">
+          <label for="novoCredibilidade">Credibilidade</label>
+          <select id="novoCredibilidade">
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★☆</option>
+            <option value="3" selected>★★★☆☆</option>
+            <option value="2">★★☆☆☆</option>
+            <option value="1">★☆☆☆☆</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label for="novoTestemunhas">Número de Testemunhas</label>
+          <input type="number" id="novoTestemunhas" min="0" value="1">
+        </div>
+
+        <div class="form-grupo preview-estranheza">
+          <label>Cálculo em Tempo Real:</label>
+          <div class="box-preview">
+            <span>Classificação: <strong id="previewSelo">-</strong></span>
+            <span>Pontuação: <strong id="previewPontos">0 pts</strong></span>
+          </div>
+        </div>
+
+        <div class="modal-footer grid-full">
+          <button type="button" class="btn btn-secundario" id="btnCancelarNovo">Cancelar</button>
+          <button type="submit" class="btn btn-novo">Salvar Registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
